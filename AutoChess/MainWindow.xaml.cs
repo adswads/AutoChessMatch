@@ -59,7 +59,7 @@ https://github.com/adswads/AutoChessMatch";
                 try
                 {
                     var str = _gConfig.HttpGet($"http://www.adswads.com:8222/api/AutoChess/{_gConfig.Version}");
-                    str = str.Replace("\\\"", "\"").Trim('\"').Replace("\\r\\n", "\r\n");
+                    str = str.Replace("\\\"", "\"").Trim('\"').Replace("\\r\\n", "\n");
                     if (string.IsNullOrWhiteSpace(str))
                     { }
                     else if (str.Contains("|"))
@@ -67,8 +67,8 @@ https://github.com/adswads/AutoChessMatch";
                         var strs = str.Split('|');
                         if (strs.Length == 3)
                         {
-                            var linesAddition = strs[1].Replace("\r\n", "\r").Split('\r').ToList();
-                            var linesChessPieces = strs[2].Replace("\r\n", "\r").Split('\r').ToList();
+                            var linesAddition = strs[1].Replace("\r\n", "\n").Split('\n').ToList();
+                            var linesChessPieces = strs[2].Replace("\r\n", "\n").Split('\n').ToList();
                             _gConfig.InitData(linesChessPieces, linesAddition);
 
                             Dispatcher.Invoke(new Action(() =>

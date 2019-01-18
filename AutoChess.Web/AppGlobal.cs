@@ -42,7 +42,9 @@ namespace AutoChess.Web
                     File.WriteAllText(path, JsonConvert.SerializeObject(AppConfig, Formatting.Indented), Encoding.UTF8);
                 }
                 ReadAutoChessConfig();
+                File.AppendAllText($"{HttpRuntime.AppDomainAppPath}/App_Data/log.log", $"{DateTime.Now.ToString()}: 启动服务器……\r\n");
 
+                //放到服务器上无效，修改后重启IIS吧
                 Task.Run(() =>
                 {
                     while (true)
@@ -50,7 +52,11 @@ namespace AutoChess.Web
                         System.Threading.Thread.Sleep(5 * 60 * 1000);
 
                         var str = File.ReadAllText($"{HttpRuntime.AppDomainAppPath}/App_Data/AppConfig.ini", Encoding.UTF8);
+
+                        File.AppendAllText($"{HttpRuntime.AppDomainAppPath}/App_Data/log.log", $"{DateTime.Now.ToString()}: {str}\r\n");
+
                         AppConfig = JsonConvert.DeserializeObject<Config>(str) ?? new Config();
+
                         if (AppConfig.ACDataUpdate)
                         {
                             AppConfig.ACDataUpdate = false;

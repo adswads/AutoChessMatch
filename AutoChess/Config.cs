@@ -50,7 +50,7 @@ namespace AutoChess
                 //}
                 //else
                 {
-                    linesChessPieces = ConfigData.ChessPieces.Replace("\r\n", "\r").Split('\r').ToList();
+                    linesChessPieces = ConfigData.ChessPieces.Replace("\r\n", "\n").Split('\n').ToList();
                     //File.WriteAllText(path, ConfigData.ChessPieces, Encoding.UTF8);
                 }
 
@@ -62,7 +62,7 @@ namespace AutoChess
                 //}
                 //else
                 {
-                    linesAddition = ConfigData.Addition.Replace("\r\n", "\r").Split('\r').ToList();
+                    linesAddition = ConfigData.Addition.Replace("\r\n", "\n").Split('\n').ToList();
                     //File.WriteAllText(path, ConfigData.Addition, Encoding.UTF8);
                 }
 
