@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,83 +21,134 @@ namespace AutoChess
         /// <summary>查询的列表</summary>
         public List<string> ListQuery { get; set; } = new List<string>();
 
-        string _Note;
+        string _Note = "";
         /// <summary>说明</summary>
         public string Note { get { return _Note; } set { SetProperty(ref _Note, value, nameof(Note)); } }
+
+        string _Notice = "初始化完成";
+        /// <summary>提示</summary>
+        public string Notice { get { return _Notice; } set { SetProperty(ref _Notice, value, nameof(Notice)); } }
+
+        /// <summary>版本</summary>
+        public int Version { get; } = 1001;
 
         public void Init()
         {
             try
             {
-                var dir = $"{AppDomain.CurrentDomain.BaseDirectory}Data\\";
-                var path = dir + "ChessPieces.csv";
-                List<string> lines;
-                if (Directory.Exists(dir) == false)
+                //var dir = $"{AppDomain.CurrentDomain.BaseDirectory}Data\\";
+                //var path = dir + "ChessPieces.csv";
+                List<string> linesChessPieces;
+                List<string> linesAddition;
+                //if (Directory.Exists(dir) == false)
+                //{
+                //    Directory.CreateDirectory(dir);
+                //}
+                //if (File.Exists(path))
+                //{
+                //    linesChessPieces = File.ReadAllLines(path, Encoding.UTF8).ToList();
+                //}
+                //else
                 {
-                    Directory.CreateDirectory(dir);
-                }
-                if (File.Exists(path))
-                {
-                    lines = File.ReadAllLines(path, Encoding.UTF8).ToList();
-                }
-                else
-                {
-                    lines = ConfigData.ChessPieces.Replace("\r\n", "\r").Split('\r').ToList();
-                    File.WriteAllText(path, ConfigData.ChessPieces, Encoding.UTF8);
-                }
-                foreach (var line in lines)
-                {
-                    var strs = line?.Split(',');
-                    if (strs?.Length < 7)
-                    {
-                        continue;
-                    }
-                    var i = 0;
-                    ListChessPieces.Add(new ChessPieces()
-                    {
-                        Name = strs[i++],
-                        Race1 = strs[i++],
-                        Race2 = strs[i++],
-                        Profession = strs[i++],
-                        Level = strs[i++],
-                        Attack = strs[i++],
-                        Skill = strs[i++],
-                    });
+                    linesChessPieces = ConfigData.ChessPieces.Replace("\r\n", "\r").Split('\r').ToList();
+                    //File.WriteAllText(path, ConfigData.ChessPieces, Encoding.UTF8);
                 }
 
-                path = dir + "Addition.csv";
-                if (File.Exists(path))
+
+                //path = dir + "Addition.csv";
+                //if (File.Exists(path))
+                //{
+                //    linesAddition = File.ReadAllLines(path, Encoding.UTF8).ToList();
+                //}
+                //else
                 {
-                    lines = File.ReadAllLines(path, Encoding.UTF8).ToList();
-                }
-                else
-                {
-                    lines = ConfigData.Addition.Replace("\r\n", "\r").Split('\r').ToList();
-                    File.WriteAllText(path, ConfigData.Addition, Encoding.UTF8);
-                }
-                foreach (var line in lines)
-                {
-                    var strs = line?.Split(',');
-                    if (strs?.Length < 3)
-                    {
-                        continue;
-                    }
-                    var i = 0;
-                    ListAddition.Add(new Addition()
-                    {
-                        Name = strs[i++],
-                        Number = int.Parse(strs[i++]),
-                        Content = strs[i++],
-                    });
+                    linesAddition = ConfigData.Addition.Replace("\r\n", "\r").Split('\r').ToList();
+                    //File.WriteAllText(path, ConfigData.Addition, Encoding.UTF8);
                 }
 
-                ListChessPieces.Sort((s, s1) => s.Profession.CompareTo(s1.Profession));
-
-                ListQuery = ListChessPieces.Select(b => b.QueryText).ToList();
+                InitData(linesChessPieces, linesAddition);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("初始化错误，请重新启动程序: " + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 初始化加成和棋子的数据
+        /// </summary>
+        /// <param name="linesChessPieces"></param>
+        /// <param name="linesAddition"></param>
+        public void InitData(List<string> linesChessPieces, List<string> linesAddition)
+        {
+            ListChessPieces.Clear();
+            foreach (var line in linesChessPieces)
+            {
+                var strs = line?.Split(',');
+                if (strs?.Length < 7)
+                {
+                    continue;
+                }
+                var i = 0;
+                ListChessPieces.Add(new ChessPieces()
+                {
+                    Name = strs[i++],
+                    Race1 = strs[i++],
+                    Race2 = strs[i++],
+                    Profession = strs[i++],
+                    Level = strs[i++],
+                    Attack = strs[i++],
+                    Skill = strs[i++],
+                });
+            }
+
+            ListAddition.Clear();
+            foreach (var line in linesAddition)
+            {
+                var strs = line?.Split(',');
+                if (strs?.Length < 3)
+                {
+                    continue;
+                }
+                var i = 0;
+                ListAddition.Add(new Addition()
+                {
+                    Name = strs[i++],
+                    Number = int.Parse(strs[i++]),
+                    Content = strs[i++],
+                });
+            }
+
+            ListChessPieces.Sort((s, s1) => s.Profession.CompareTo(s1.Profession));
+
+            ListQuery = ListChessPieces.Select(b => b.QueryText).ToList();
+        }
+
+
+        /// <summary>
+        /// get请求获取返回的html
+        /// </summary>
+        /// <param name="url">无参URL</param>
+        /// <returns></returns>
+        public string HttpGet(string url)
+        {
+            //if (querydata?.Count > 0)
+            //{
+            //    url += "?" + string.Join("&", querydata.Select(it => it.Key + "=" + it.Value));
+            //}
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.ContentType = "text/html;charset=UTF-8";
+            request.CookieContainer = new CookieContainer();
+            request.Accept = "*/*";
+            request.Timeout = 5000;
+            request.Proxy = new WebProxy();
+
+            var response = request.GetResponse() as HttpWebResponse;
+            using (Stream s = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(s, Encoding.UTF8);
+                return reader.ReadToEnd();
             }
         }
     }
@@ -123,7 +175,7 @@ namespace AutoChess
     /// </summary>
     public class ChessPieces : BaseModel
     {
-        int _Sn=0;
+        int _Sn = 0;
         /// <summary>序号</summary>
         public int Sn { get { return _Sn; } set { SetProperty(ref _Sn, value, nameof(Sn)); } }
         string _Name;

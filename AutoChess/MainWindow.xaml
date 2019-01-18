@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="48"></RowDefinition>
             <RowDefinition Height="10*"></RowDefinition>
+            <RowDefinition Height="28"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"></ColumnDefinition>
@@ -30,7 +31,7 @@
         </Grid>
         <TextBox Name="_vAbout" Grid.Row="0" Grid.Column="1" Margin="12,2,12,0" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" FontSize="12"></TextBox>
         
-        <DataGrid Grid.Column="0" Grid.Row="1" Name="_vCards" HorizontalAlignment="Stretch" Margin="12,12,12,12" VerticalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True">
+        <DataGrid Grid.Column="0" Grid.Row="1" Name="_vCards" HorizontalAlignment="Stretch" Margin="12,12,12,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="序号" Binding="{Binding Sn, Mode=TwoWay}" />
                 <DataGridTextColumn Header="名称" Binding="{Binding Name, Mode=TwoWay}" />
@@ -45,10 +46,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="技能" Binding="{Binding Begin, Mode=TwoWay}" />
+                <DataGridTextColumn Header="技能" Binding="{Binding Skill, Mode=TwoWay}" />
             </DataGrid.Columns>
             <!--<TextBlock></TextBlock>-->
         </DataGrid>
-        <TextBox  Grid.Column="1" Grid.Row="1" Name="_vCardFetter" HorizontalAlignment="Stretch" Margin="12,12,12,12" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Name="_vCardFetter" HorizontalAlignment="Stretch" Margin="12,12,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+        <TextBox Name="_vNotice" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="" Grid.ColumnSpan="2"  Margin="12,2,12,4" BorderThickness="0" IsReadOnly="True"></TextBox>
     </Grid>
 </Window>

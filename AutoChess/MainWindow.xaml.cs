@@ -38,6 +38,7 @@ namespace AutoChess
             _vCardSelect.ItemsSource = _gListQuery;
             _vCards.ItemsSource = _gListChessPieces;
             _vCardFetter.SetBinding(TextBox.TextProperty, new Binding(nameof(_gConfig.Note)) { Source = _gConfig, Mode = BindingMode.TwoWay });
+            _vNotice.SetBinding(TextBox.TextProperty, new Binding(nameof(_gConfig.Notice)) { Source = _gConfig, Mode = BindingMode.TwoWay });
             //增加行号           ;
             //_vCards.LoadingRow += (s, e) => { e.Row.Header = e.Row.GetIndex() + 1; };
 
@@ -52,6 +53,39 @@ https://github.com/adswads/AutoChessMatch";
                     _vCardMod_Click(null, null);
                 }
             };
+
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var str = _gConfig.HttpGet($"http://www.adswads.com:8222/api/AutoChess/{_gConfig.Version}");
+                    str = str.Replace("\\\"", "\"").Trim('\"').Replace("\\r\\n", "\r\n");
+                    if (string.IsNullOrWhiteSpace(str))
+                    { }
+                    else if (str.Contains("|"))
+                    {
+                        var strs = str.Split('|');
+                        if (strs.Length == 3)
+                        {
+                            var linesAddition = strs[1].Replace("\r\n", "\r").Split('\r').ToList();
+                            var linesChessPieces = strs[2].Replace("\r\n", "\r").Split('\r').ToList();
+                            _gConfig.InitData(linesChessPieces, linesAddition);
+
+                            Dispatcher.Invoke(new Action(() =>
+                            {
+                                _gListQuery.Clear();
+                                _gConfig.ListQuery.ForEach(b => _gListQuery.Add(b));
+                            }));
+                            _gConfig.Notice = strs[0];
+                        }
+                    }
+                    else
+                    {
+                        _gConfig.Notice = str;
+                    }
+                }
+                catch { }
+            });
         }
 
         private void _vCardSelect_TextChanged(object sender, TextChangedEventArgs e)
