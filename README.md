@@ -11,6 +11,11 @@ https://pan.baidu.com/s/19jjG6Ty_KJa9RowpgWMQhg
 同时会自动更新右方的羁绊属性
 ![image](https://github.com/adswads/AutoChessMatch/blob/master/阵容搭配效果图.png)
 
+### 更新说明
+1. v1.1 2019.01.26  
+* 恶魔猎手机制实现  
+* 增加小于4个棋子可实现的羁绊的提示
+
 ### Q&A
 1. 有没有最大棋子限制？  
 有，最大10个棋子
