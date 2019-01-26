@@ -6,6 +6,8 @@ LZ很菜，想自己比较方便配点阵容。但没有找见类似的网页或
 ### 下载链接
 https://pan.baidu.com/s/19jjG6Ty_KJa9RowpgWMQhg
 
+https://github.com/adswads/AutoChessMatch/releases
+
 ### 使用方法
 在卡牌的输入框点击下拉选择对应的卡牌或者输入关键字搜索对应的卡牌，选择后按回车键或者点击**添加**按钮，会自动添加到下方的阵容框
 同时会自动更新右方的羁绊属性
