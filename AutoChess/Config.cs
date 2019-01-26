@@ -30,7 +30,10 @@ namespace AutoChess
         public string Notice { get { return _Notice; } set { SetProperty(ref _Notice, value, nameof(Notice)); } }
 
         /// <summary>版本</summary>
-        public int Version { get; } = 1001;
+        public int Version { get; } = 1100;
+
+        /// <summary>所有友方恶魔视为一个恶魔的数量</summary>
+        public int DemonAssNum { get; set; } = 2;
 
         public void Init()
         {
@@ -110,12 +113,17 @@ namespace AutoChess
                     continue;
                 }
                 var i = 0;
-                ListAddition.Add(new Addition()
+                var add = new Addition()
                 {
                     Name = strs[i++],
                     Number = int.Parse(strs[i++]),
                     Content = strs[i++],
-                });
+                };
+                ListAddition.Add(add);
+                if (add.Content.Contains("所有友方恶魔为同一种类"))
+                {
+                    DemonAssNum = add.Number;
+                }
             }
 
             ListChessPieces.Sort((s, s1) => s.Profession.CompareTo(s1.Profession));

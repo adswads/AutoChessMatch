@@ -33,6 +33,10 @@ namespace AutoChess.Web.Controllers
                 {
                     reStr = $"{AppGlobal.AppConfig.ACUpdateSucceedTip}|{AppGlobal.ACAddition}|{AppGlobal.ACChessPieces}";
                 }
+                else if (id < AppGlobal.AppConfig.ACClientDataVer)
+                {
+                    reStr = $"{AppGlobal.AppConfig.ACUpdateDataTip}|{AppGlobal.ACAddition}|{AppGlobal.ACChessPieces}";
+                }
                 else { }
             }
             catch { }

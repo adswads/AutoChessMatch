@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutoChess"
         mc:Ignorable="d"
-        Title="刀塔自走棋阵容搭配 - by 子风 2019.01.17" Height="450" Width="800" FontSize="14" WindowStartupLocation="CenterScreen" Icon="ac.ico">
+        Title="刀塔自走棋阵容搭配 v1.1 - by 子风 2019.01.26" Height="450" Width="800" FontSize="14" WindowStartupLocation="CenterScreen" Icon="ac.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="48"></RowDefinition>
@@ -50,7 +50,7 @@
             </DataGrid.Columns>
             <!--<TextBlock></TextBlock>-->
         </DataGrid>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="_vCardFetter" HorizontalAlignment="Stretch" Margin="12,12,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+        <RichTextBox Grid.Column="1" Grid.Row="1" Name="_vCardFetter" HorizontalAlignment="Stretch" Margin="12,12,12,0" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
         <TextBox Name="_vNotice" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="" Grid.ColumnSpan="2"  Margin="12,2,12,4" BorderThickness="0" IsReadOnly="True"></TextBox>
     </Grid>
 </Window>

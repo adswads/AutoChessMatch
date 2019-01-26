@@ -37,13 +37,13 @@ namespace AutoChess
 
             _vCardSelect.ItemsSource = _gListQuery;
             _vCards.ItemsSource = _gListChessPieces;
-            _vCardFetter.SetBinding(TextBox.TextProperty, new Binding(nameof(_gConfig.Note)) { Source = _gConfig, Mode = BindingMode.TwoWay });
+            //_vCardFetter.SetBinding(TextBox.TextProperty, new Binding(nameof(_gConfig.Note)) { Source = _gConfig, Mode = BindingMode.TwoWay });
             _vNotice.SetBinding(TextBox.TextProperty, new Binding(nameof(_gConfig.Notice)) { Source = _gConfig, Mode = BindingMode.TwoWay });
             //增加行号           ;
             //_vCards.LoadingRow += (s, e) => { e.Row.Header = e.Row.GetIndex() + 1; };
 
             _vAbout.Text = @"可自由修改使用，本人不对任何结果负责
-可根据版本更新自行修改配置
+有问题可到github上反馈给我
 https://github.com/adswads/AutoChessMatch";
 
             _vCardSelect.KeyDown += (s, e) =>
@@ -130,19 +130,40 @@ https://github.com/adswads/AutoChessMatch";
             //获取有效加成
             var classifys = additions.GroupBy(b => b).ToDictionary(b => b.Key, b => b.Count());
             var sb = new StringBuilder();
+
+            //调整为富文本编辑框
+            //当前有的效果
+            _vCardFetter.Document.Blocks.Clear();
+            var par = new Paragraph();
+            //可以形成的效果
+            var parhope = new Paragraph();
             foreach (var classify in classifys)
             {
-                if (classify.Key == "恶魔" && classify.Value > 1)
+                if (classify.Key == "恶魔" && (classify.Value > 1 && classifys.FirstOrDefault(b => b.Key == "恶魔猎手").Value < _gConfig.DemonAssNum))
                 {
                     continue;
                 }
                 var list = _gConfig.ListAddition.Where(b => b.Name == classify.Key && b.Number <= classify.Value).ToList();
                 list?.ForEach(b =>
                 {
-                    sb.AppendLine(b.ToString());
+                    //sb.AppendLine(b.ToString());
+                    par.Inlines.Add(new Run() { Text = $"{b.Name} {b.Number} ", FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush(Colors.Blue) });
+                    par.Inlines.Add(new Run() { Text = $"{b.Content}\r\n" });
+                });
+
+                list = _gConfig.ListAddition.Where(b => b.Name == classify.Key && b.Number > classify.Value && b.Number - classify.Value < 4).ToList();
+                list?.ForEach(b =>
+                {
+                    parhope.Inlines.Add(new Run() { Text = $"{b.Name} {classifys[b.Name]}/{b.Number} ", FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush(Colors.YellowGreen) });
+                    parhope.Inlines.Add(new Run() { Text = $"{b.Content}\r\n", Foreground = new SolidColorBrush(Colors.DarkGray) });
                 });
             }
-            _gConfig.Note = sb.ToString();
+            _vCardFetter.Document.Blocks.Add(par);
+            _vCardFetter.Document.Blocks.Add(parhope);
+            //当前可以形成的组合
+
+
+            //_gConfig.Note = sb.ToString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
