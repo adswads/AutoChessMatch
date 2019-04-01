@@ -137,20 +137,35 @@ https://github.com/adswads/AutoChessMatch";
             var par = new Paragraph();
             //可以形成的效果
             var parhope = new Paragraph();
+            //神族
+            var godPieces = 0;
+            var godRaces = true;
+            //所有职业
+            var professions = _gListChessPieces.ToList().Select(b => b.Profession).Distinct().ToList();
+
             foreach (var classify in classifys)
             {
                 if (classify.Key == "恶魔" && (classify.Value > 1 && classifys.FirstOrDefault(b => b.Key == "恶魔猎手").Value < _gConfig.DemonAssNum))
                 {
                     continue;
                 }
+                if (classify.Key == "神")
+                {
+                    godPieces = classify.Value;
+                    continue;
+                }
                 var list = _gConfig.ListAddition.Where(b => b.Name == classify.Key && b.Number <= classify.Value).ToList();
+                if (godRaces && list?.Count > 0 && professions.Contains(classify.Key) == false)
+                {
+                    godRaces = false;
+                }
                 list?.ForEach(b =>
                 {
                     //sb.AppendLine(b.ToString());
                     par.Inlines.Add(new Run() { Text = $"{b.Name} {b.Number} ", FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush(Colors.Blue) });
                     par.Inlines.Add(new Run() { Text = $"{b.Content}\r\n" });
                 });
-
+                //当前可以形成的组合
                 list = _gConfig.ListAddition.Where(b => b.Name == classify.Key && b.Number > classify.Value && b.Number - classify.Value < 4).ToList();
                 list?.ForEach(b =>
                 {
@@ -158,10 +173,28 @@ https://github.com/adswads/AutoChessMatch";
                     parhope.Inlines.Add(new Run() { Text = $"{b.Content}\r\n", Foreground = new SolidColorBrush(Colors.DarkGray) });
                 });
             }
+            //处理神族
+            if (godPieces > 0 && godRaces)
+            {
+                var list = _gConfig.ListAddition.Where(b => b.Name == "神" && b.Number <= godPieces).ToList();
+                list?.ForEach(b =>
+                {
+                    godRaces = false;
+                    //sb.AppendLine(b.ToString());
+                    par.Inlines.Add(new Run() { Text = $"{b.Name} {b.Number} ", FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush(Colors.Blue) });
+                    par.Inlines.Add(new Run() { Text = $"{b.Content}\r\n" });
+                });
+                //当前可以形成的组合
+                list = _gConfig.ListAddition.Where(b => b.Name == "神" && b.Number > godPieces && b.Number - godPieces < 4).ToList();
+                list?.ForEach(b =>
+                {
+                    parhope.Inlines.Add(new Run() { Text = $"{b.Name} {classifys[b.Name]}/{b.Number} ", FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush(Colors.YellowGreen) });
+                    parhope.Inlines.Add(new Run() { Text = $"{b.Content}\r\n", Foreground = new SolidColorBrush(Colors.DarkGray) });
+                });
+            }
+
             _vCardFetter.Document.Blocks.Add(par);
             _vCardFetter.Document.Blocks.Add(parhope);
-            //当前可以形成的组合
-
 
             //_gConfig.Note = sb.ToString();
         }
