@@ -30,7 +30,7 @@ namespace AutoChess
         public string Notice { get { return _Notice; } set { SetProperty(ref _Notice, value, nameof(Notice)); } }
 
         /// <summary>版本</summary>
-        public int Version { get; } = 1100;
+        public int Version { get; } = 1200;
 
         /// <summary>所有友方恶魔视为一个恶魔的数量</summary>
         public int DemonAssNum { get; set; } = 2;

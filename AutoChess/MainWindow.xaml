@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutoChess"
         mc:Ignorable="d"
-        Title="刀塔自走棋阵容搭配 v1.1 - by 子风 2019.01.26" Height="450" Width="800" FontSize="14" WindowStartupLocation="CenterScreen" Icon="ac.ico">
+        Title="刀塔自走棋阵容搭配 v1.2 - by 子风 2019.04.01" Height="450" Width="800" FontSize="14" WindowStartupLocation="CenterScreen" Icon="ac.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="48"></RowDefinition>
